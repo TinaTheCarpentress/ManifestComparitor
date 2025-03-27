@@ -1,0 +1,12 @@
+{
+  "domains": {
+    "dlou": "http://dlouprsbar001.recondo.vci:8080/botFarmBarn/",
+    "slou": "http://slouprsbar000.recondo.vci/botFarmBarn/",
+    "papa": "http://papabotbar000.recondo.vci/botFarmBarn/"
+  },
+  "links": {
+    "dManifest": "barn/v1/manifest/dev?pretty=true",
+    "sManifest": "barn/v1/manifest/stage?pretty=true",
+    "pManifest": "barn/v1/manifest/prod?pretty=true"
+  }
+}

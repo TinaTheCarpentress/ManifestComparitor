@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    div.select {
+        text-align: right;
+    }
+    select {
+        width: 20%;
+    }
+    body {
+        font-size: 20px;
+        color: #feffde;
+        background-color: #1a1e22;
+    }
+    button {
+        font-size: 20px;
+    }
+    a {
+        color: #1e8edb;
+    }
+    a:visited {
+        color: #9e5e9b;
+    }
+    table, th, td {
+        border:1px solid #8c8e94;
+    }
+    th, td {
+        height:20px;
+    }
+    #mainTable {
+        table-layout: fixed;
+    }
+    .nameCell {
+        width: 40%;
+    }
+    .genericCell {
+        width: 15%;
+    }
+</style>
+<script type="text/javascript" src="./manifestDiff.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Compare Manifests</title>
+</head>
+<body>
+<div id="queryParams"><div class="select"><label for="manifest1">First Manifest:</label><select id="manifest1" name="manifest1"></select><br/><label for="manifest2">Second Manifest:</label><select id="manifest2" name="manifest2"></select><br/><button onclick="compareManifests()">Compare!</button></div><br/>
+<div id="main"></div><br/>
+<div id="second"></div>
+</body>
+</html>
