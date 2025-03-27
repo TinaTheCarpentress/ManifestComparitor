@@ -59,7 +59,9 @@ function compareManifests() {
 
     if (manifestURL != "none" && manifest2URL != "none") {
         document.getElementById("main").innerHTML = `<pre>Querying <a href="${manifestURL}">${manifestURL}</a></pre>`;
-        fetch(manifestURL).then(response => {console.log(JSON.stringify(response)); return response.json()}).then(manifest => {
+        fetch(manifestURL, {
+            referrerPolicy: "unsafe-url"
+        }).then(response => {console.log(JSON.stringify(response)); return response.json()}).then(manifest => {
             //document.getElementById("second").innerHTML = `<pre>${JSON.stringify(manifest, null, 2)}</pre>`;
             let newManifest = {};
             manifest.bots.forEach(item => {
@@ -68,7 +70,9 @@ function compareManifests() {
             manifest = newManifest;
             document.getElementById("main").innerHTML = `<pre>Querying <a href="${manifestURL}">${manifestURL}</a>\nQuerying <a href="${manifest2URL}">${manifest2URL}</a></pre>`;
             console.log(`Querying ${manifest2URL}`);
-            fetch(manifest2URL).then(response2 => response2.json()).then(manifest2 => {
+            fetch(manifest2URL, {
+                referrerPolicy: "unsafe-url"
+            }).then(response2 => response2.json()).then(manifest2 => {
                 let newManifest = {};
                 manifest2.bots.forEach(item => {
                     newManifest[item.name] = item;
@@ -125,7 +129,9 @@ function compareManifests() {
     } else {
         manifestURL = (manifestURL == "none" ? manifest2URL : manifestURL)
         document.getElementById("main").innerHTML = `<pre>Querying <a href="${manifestURL}">${manifestURL}</a></pre>`;
-        fetch(manifestURL).then(response => response.json()).then(manifest => {
+        fetch(manifestURL, {
+            referrerPolicy: "unsafe-url"
+        }).then(response => response.json()).then(manifest => {
             let newManifest = {};
             manifest.bots.forEach(item => {
                 newManifest[item.name] = item;
