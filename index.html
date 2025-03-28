@@ -59,6 +59,13 @@
         float: left;
     }
 
+    .hidden {
+        display: none;
+        text-align: left;
+        font-size: 20px;
+        float: left;
+    }
+
     .deploy {
         width: 5%;
         text-align: center;
@@ -84,9 +91,13 @@
 <script type="text/javascript">
     function deploy(bundle) {
         let user = document.getElementById("user").value;
+        let copy = document.getElementById("copy");
         let data = {user, bundle};
+        debugger;
         console.log(JSON.stringify(data));
-        navigator.clipboard.writeText(JSON.stringify(data));
+        copy.textContent = JSON.stringify(data);
+        copy.select();
+        document.execCommand("copy");
         document.getElementById(bundle).style.display = "flex";
     }
 
@@ -114,7 +125,8 @@
                                                                                   name="manifest1"></select><br/><label
                 for="manifest2">Second Manifest:</label><select id="manifest2" name="manifest2"></select><br/><label
                 for="user">Deploy Username:</label><input type="text" id="user" name="user"></input><br/>
-            <button onclick="compareManifests()">Compare!</button>
+            <button onclick="compareManifests()">Compare!</button><br/><label
+                    for="copy">Copied Deploy JSON</label><textarea id="copy" name="copy"></textarea>
         </div>
         <br/>
         <div id="main"></div>
