@@ -7,20 +7,18 @@ fetch('./urls.json').then(response => response.json()).then(urls => {
     domainNames = Object.keys(urls.domains);
 
     document.getElementById("manifest1").innerHTML = getOptionsInnerHTML(domainNames, 0);
-    document.getElementById("manifest2").innerHTML = getOptionsInnerHTML(domainNames, 1);
+    document.getElementById("manifest2").innerHTML = getOptionsInnerHTML(domainNames, domainNames.length-1);
+
+    let date = new Date();
+
+    document.getElementById("manifest1EndDate").setAttribute("value",  "" + (date.getFullYear() + 1) + "-" + date.getMonth().toString().padStart(2,"0") + "-" + date.getDate().toString().padStart(2,"0"));
+    document.getElementById("manifest2EndDate").setAttribute("value",  "" + (date.getFullYear() + 1) + "-" + date.getMonth().toString().padStart(2,"0") + "-" + date.getDate().toString().padStart(2,"0"));
 });
 
-function compareManifests() {
-    let barnURL;
+function getManifestURLFromBarnName(barnName) {
     let manifestURL;
-    let barn2URL;
-    let manifest2URL;
-
-    let barnName = document.getElementById("manifest1").value;
-    let barn2Name = document.getElementById("manifest2").value;
-
-    if (barnName != "none") {
-        barnURL = domains[barnName];
+    if (barnName != "") {
+        let barnURL = domains[barnName];
         switch (barnURL[7]) {
             case ('d'):
                 manifestURL = barnURL + links.dManifest;
@@ -31,37 +29,54 @@ function compareManifests() {
             case ('p'):
                 manifestURL = barnURL + links.pManifest;
                 break;
+            case (''):
+                manifestURL = '';
+                break;
             default:
                 console.log(barnURL[7]);
         }
     } else {
         manifestURL = "none";
     }
+    return manifestURL;
+}
 
-    if (barn2Name != "none") {
-        barn2URL = domains[barn2Name];
-        switch (barn2URL[7]) {
-            case ('d'):
-                manifest2URL = barn2URL + links.dManifest;
-                break;
-            case ('s'):
-                manifest2URL = barn2URL + links.sManifest;
-                break;
-            case ('p'):
-                manifest2URL = barn2URL + links.pManifest;
-                break;
-            default:
-                console.log(barn2URL[7]);
+function filterManifestByDates(manifest, startDate, endDate) {
+    console.log(JSON.stringify(manifest.bots));
+    let newBots = [];
+    manifest.bots.forEach(item => {
+        let updated = item.updated;
+        if (updated >= startDate && updated <= endDate) {
+            newBots.push(item);
         }
-    } else {
-        manifest2URL = "none";
-    }
+    })
+    manifest.bots = newBots;
+    return manifest;
+}
+
+function compareManifests() {
+    let barnURL;
+    let manifestURL;
+    let barn2URL;
+    let manifest2URL;
+
+    let barnName = document.getElementById("manifest1").value;
+    let barn2Name = document.getElementById("manifest2").value;
+
+    let manifest1StartDate = new Date(document.getElementById("manifest1StartDate").value).getTime();
+    let manifest1EndDate = new Date(document.getElementById("manifest1EndDate").value).getTime();
+    let manifest2StartDate = new Date(document.getElementById("manifest2StartDate").value).getTime();
+    let manifest2EndDate = new Date(document.getElementById("manifest2EndDate").value).getTime();
+
+    manifestURL = getManifestURLFromBarnName(barnName);
+    manifest2URL = getManifestURLFromBarnName(barn2Name)
 
     if (manifestURL != "none" && manifest2URL != "none") {
         document.getElementById("main").innerHTML = `<pre>Querying <a href="${manifestURL}">${manifestURL}</a></pre>`;
         fetch(manifestURL).then(response => {console.log(JSON.stringify(response)); return response.json()}).then(manifest => {
             //document.getElementById("second").innerHTML = `<pre>${JSON.stringify(manifest, null, 2)}</pre>`;
             let newManifest = {};
+            manifest = filterManifestByDates(manifest, manifest1StartDate, manifest1EndDate);
             manifest.bots.forEach(item => {
                 newManifest[item.name] = item;
             });
@@ -70,6 +85,7 @@ function compareManifests() {
             console.log(`Querying ${manifest2URL}`);
             fetch(manifest2URL).then(response2 => response2.json()).then(manifest2 => {
                 let newManifest = {};
+                manifest2 = filterManifestByDates(manifest2, manifest2StartDate, manifest2EndDate);
                 manifest2.bots.forEach(item => {
                     newManifest[item.name] = item;
                 });
@@ -127,6 +143,7 @@ function compareManifests() {
         document.getElementById("main").innerHTML = `<pre>Querying <a href="${manifestURL}">${manifestURL}</a></pre>`;
         fetch(manifestURL).then(response => response.json()).then(manifest => {
             let newManifest = {};
+            manifest = filterManifestByDates(manifest, manifest1StartDate, manifest1EndDate);
             manifest.bots.forEach(item => {
                 newManifest[item.name] = item;
             });

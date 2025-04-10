@@ -3,7 +3,8 @@
     "dlou": "http://dlouprsbar001.recondo.vci:8080/botFarmBarn/",
     "slou": "http://slouprsbar000.recondo.vci/botFarmBarn/",
     "papa": "http://papabotbar000.recondo.vci/botFarmBarn/",
-    "plou": "http://plouprsbar000.recondo.vci/botFarmBarn/"
+    "plou": "http://plouprsbar000.recondo.vci/botFarmBarn/",
+    "": ""
   },
   "links": {
     "dManifest": "barn/v1/manifest/dev?pretty=true",

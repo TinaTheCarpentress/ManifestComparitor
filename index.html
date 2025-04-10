@@ -123,7 +123,35 @@
         <div class="select"><label for="manifest1">First Manifest:</label><select id="manifest1"
                                                                                   name="manifest1"></select><br/><label
                 for="manifest2">Second Manifest:</label><select id="manifest2" name="manifest2"></select><br/><label
-                for="user">Deploy Username:</label><input type="text" id="user" name="user"></input><br/>
+                for="user">Deploy Username:</label><input type="text" id="user" name="user"></input><br/><label for="manifest1StartDate">Manifest 1 Start Date:</label>
+
+            <input
+                    type="date"
+                    id="manifest1StartDate"
+                    name="manifest1StartDate"
+                    value="2020-01-01"
+                    min="2020-01-01"/><br/><label for="manifest1EndDate">Manifest 1 End Date:</label>
+
+            <input
+                    type="date"
+                    id="manifest1EndDate"
+                    name="manifest1EndDate"
+                    value="2020-01-01"
+                    min="2020-01-01"/><br/><label for="manifest2StartDate">Manifest 2 Start Date:</label>
+
+            <input
+                    type="date"
+                    id="manifest2StartDate"
+                    name="manifest2StartDate"
+                    value="2020-01-01"
+                    min="2020-01-01"/><br/><label for="manifest2EndDate">Manifest 2 End Date:</label>
+
+            <input
+                    type="date"
+                    id="manifest2EndDate"
+                    name="manifest2EndDate"
+                    value="2020-01-01"
+                    min="2020-01-01"/><br/>
             <button onclick="compareManifests()">Compare!</button><br/><label
                     for="copy">Copied Deploy JSON</label><textarea id="copy" name="copy"></textarea>
         </div>
