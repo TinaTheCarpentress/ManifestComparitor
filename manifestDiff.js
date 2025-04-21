@@ -18,7 +18,7 @@ fetch('./urls.json').then(response => response.json()).then(urls => {
 function getManifestURLFromBarnName(barnName) {
     let manifestURL;
     if (barnName != "") {
-        let barnURL = domains[barnName];
+        let barnURL = getBarnURLFromBarnName(barnName);
         switch (barnURL[7]) {
             case ('d'):
                 manifestURL = barnURL + links.dManifest;
@@ -39,6 +39,10 @@ function getManifestURLFromBarnName(barnName) {
         manifestURL = "none";
     }
     return manifestURL;
+}
+
+function getBarnURLFromBarnName(barnName) {
+    return domains[barnName];
 }
 
 function filterManifestByDates(manifest, startDate, endDate) {
@@ -70,6 +74,8 @@ function compareManifests() {
 
     manifestURL = getManifestURLFromBarnName(barnName);
     manifest2URL = getManifestURLFromBarnName(barn2Name)
+    barnURL = getBarnURLFromBarnName(barnName);
+    barn2URL = getBarnURLFromBarnName(barn2Name);
 
     if (manifestURL != "none" && manifest2URL != "none") {
         document.getElementById("main").innerHTML = `<pre>Querying <a href="${manifestURL}">${manifestURL}</a></pre>`;
