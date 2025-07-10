@@ -8,6 +8,7 @@
   "links": {
     "dManifest": "barn/v1/manifest/dev?pretty=true",
     "sManifest": "barn/v1/manifest/stage?pretty=true",
-    "pManifest": "barn/v1/manifest/prod?pretty=true"
+    "pManifest": "barn/v1/manifest/prod?pretty=true",
+    "put": "#!/manifest/deployBundleUsingPUT"
   }
 }
