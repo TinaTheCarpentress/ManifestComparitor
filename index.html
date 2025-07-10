@@ -89,7 +89,7 @@
 </style>
 <script type="text/javascript" src="manifestDiff.js"></script>
 <script type="text/javascript">
-    function deploy(bundle) {
+    function deploy(name, bundle) {
         let user = document.getElementById("user").value;
         let copy = document.getElementById("copy");
         let data = {user, bundle};
@@ -97,7 +97,7 @@
         copy.textContent = JSON.stringify(data);
         copy.select();
         document.execCommand("copy");
-        document.getElementById(bundle).style.display = "flex";
+        document.getElementById(name).style.display = "flex";
     }
 
     function allowDirectDeploy(bundle) {
