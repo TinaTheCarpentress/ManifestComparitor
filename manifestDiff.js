@@ -72,6 +72,9 @@ function compareManifests() {
     let manifest2StartDate = new Date(document.getElementById("manifest2StartDate").value).getTime();
     let manifest2EndDate = new Date(document.getElementById("manifest2EndDate").value).getTime();
 
+    let basicTableText = '<table id="mainTable" class="mainTable"><tbody><tr><th colspan="4">Newer Version</th><th class="deploy">copy deploy data</th><th colspan="4">Older version</th></tr>';
+    let newText;
+
     manifestURL = getManifestURLFromBarnName(barnName);
     manifest2URL = getManifestURLFromBarnName(barn2Name)
     barnURL = getBarnURLFromBarnName(barnName) + links.put;
@@ -98,18 +101,18 @@ function compareManifests() {
                 manifest2 = newManifest;
 
                 let diffFound = false;
-                let newText = '<table id="mainTable" style="width:100%"><tbody><tr><th>Newer Version</th><th class="deploy">copy deploy data</th><th>Older version</th></tr>';
+                newText = basicTableText;
                 Object.keys(manifest).sort().forEach(key => {
                     if (!manifest2[key]) {
                         diffFound = true;
-                        newText = `${newText}<tr><th><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th><a href="${barn2URL}">${barn2Name} barn</a></th></tr><tr><td>${formatManifestData(manifest[key])}</td><td class="deploy"><a class="deployLink" onclick="deploy('${key}', '${manifest[key].bundle}')">&#8594;</a><input type="checkbox" class="directDeploySecondary"></input><div class="tooltip" id="${key}">Copied to Clipboard</div></td><td>Not Present</td></tr><tr><td>&nbsp</td><td>&nbsp</td></tr>`;
+                        newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], {}, key, manifest[key].bundle, {})}<tr><td colspan="9"></td></tr>`;
                     } else {
                         if (manifest[key].bundle != manifest2[key].bundle) {
                             diffFound = true;
                             if (manifest[key].updated > manifest2[key].updated) {
-                                newText = `${newText}<tr><th><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th><a href="${barn2URL}">${barn2Name} barn</a></th></tr><tr><td>${formatManifestData(manifest[key])}</td><td class="deploy"><a class="deployLink" onclick="deploy('${key}', '${manifest[key].bundle}')">&#8594;<br/></a><a class="deployLink" onclick="deploy('${key}', '${manifest2[key].bundle}')">&#8592;</a><input type="checkbox" class="directDeploySecondary"></input><div class="tooltip" id="${key}">Copied to Clipboard</div></td><td>${formatManifestData(manifest2[key])}\n</td></tr><tr><td>&nbsp</td><td>&nbsp</td></tr>`;
+                                newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], manifest2[key], manifest[key].bundle, manifest2[key].bundle)}<tr><td colspan="9"></td></tr>`;
                             } else {
-                                newText = `${newText}<tr><th><a href="${barn2URL}">${barn2Name} barn</a></th><th class="deploy"></th><th><a href="${barnURL}">${barnName} barn</a></th></tr><tr><td>${formatManifestData(manifest2[key])}</td><td class="deploy"><a class="deployLink" onclick="deploy('${key}', '${manifest2[key].bundle}')">&#8594;<br/></a><a class="deployLink" onclick="deploy('${key}', '${manifest[key].bundle}')">&#8592;</a><input type="checkbox" class="directDeploySecondary"></input><div class="tooltip" id="${key}">Copied to Clipboard</div></td><td>${formatManifestData(manifest[key])}\n</td></tr><tr><td>&nbsp</td><td>&nbsp</td></tr>`;
+                                newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest2[key], manifest[key], manifest2[key].bundle, manifest[key].bundle)}<tr><td colspan="9"></td></tr>`;
                             }
                         }
                     }
@@ -127,18 +130,18 @@ function compareManifests() {
         console.log(`Querying ${manifest2URL}`);
         let manifest2 = {};
         let diffFound = false;
-        let newText = '<table id="mainTable" style="width:100%"><tbody><tr><th>Newer Version</th><th class="deploy">copy deploy data</th><th>Older version</th></tr>';
+        newText = basicTableText;
         Object.keys(manifest).sort().forEach(key => {
             if (!manifest2[key]) {
                 diffFound = true;
-                newText = `${newText}<tr><th><a href="${barnURL}">${barn2Name} barn</a></th><th class="deploy"></th><th><a href="${barn2URL}">${barn2Name} barn</a></th></tr><tr><td>${formatManifestData(manifest[key])}</td><td class="deploy"><a class="deployLink" onclick="deploy('${key}', '${manifest[key].bundle}')">&#8594;</a><input type="checkbox" class="directDeploySecondary"></input><div class="tooltip" id="${key}">Copied to Clipboard</div></td><td>Not Present</td></tr><tr><td>&nbsp</td><td>&nbsp</td></tr>`;
+                newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], {}, key, manifest[key].bundle, {})}<tr><td colspan="9"></td></tr>`;
             } else {
                 if (manifest[key].bundle != manifest2[key].bundle) {
                     diffFound = true;
                     if (manifest[key].updated > manifest2[key].updated) {
-                        newText = `${newText}<tr><th><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th><a href="${barn2URL}">${barn2Name} barn</a></th></tr><tr><td>${formatManifestData(manifest[key])}</td><td class="deploy"><a class="deployLink" onclick="deploy('${key}', '${manifest[key].bundle}')">&#8594;<br/></a><a class="deployLink" onclick="deploy('${key}', '${manifest2[key].bundle}')">&#8592;</a><input type="checkbox" class="directDeploySecondary"></input><div class="tooltip" id="${key}">Copied to Clipboard</div></td><td>${formatManifestData(manifest2[key])}\n</td></tr><tr><td>&nbsp</td><td>&nbsp</td></tr>`;
+                        newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], manifest2[key], manifest[key].bundle, manifest2[key].bundle)}<tr><td colspan="9"></td></tr>`;
                     } else {
-                        newText = `${newText}<tr><th><a href="${barn2URL}">${barn2Name} barn</a></th><th class="deploy"></th><th><a href="${barnURL}">${barnName} barn</a></th></tr><tr><td>${formatManifestData(manifest2[key])}</td><td class="deploy"><a class="deployLink" onclick="deploy('${key}', '${manifest2[key].bundle}')">&#8594;<br/></a><a class="deployLink" onclick="deploy('${key}', '${manifest[key].bundle}')">&#8592;</a><input type="checkbox" class="directDeploySecondary"></input><div class="tooltip" id="${key}">Copied to Clipboard</div></td><td>${formatManifestData(manifest[key])}\n</td></tr><tr><td>&nbsp</td><td>&nbsp</td></tr>`;
+                        newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest2[key], manifest[key], manifest2[key].bundle, manifest[key].bundle)}<tr><td colspan="9"></td></tr>`;
                     }
                 }
             }
@@ -158,18 +161,18 @@ function compareManifests() {
             console.log(`Querying ${manifest2URL}`);
             let manifest2 = {};
             let diffFound = false;
-            let newText = '<table id="mainTable" style="width:100%"><tbody><tr><th>Newer Version</th><th class="deploy">copy deploy data</th><th>Older version</th></tr>';
+            newText = basicTableText;
             Object.keys(manifest).sort().forEach(key => {
                 if (!manifest2[key]) {
                     diffFound = true;
-                    newText = `${newText}<tr><th><a href="${barnURL}">${barn2Name} barn</a></th><th class="deploy"></th><th><a href="${barn2URL}">${barn2Name} barn</a></th></tr><tr><td>${formatManifestData(manifest[key])}</td><td class="deploy"><a class="deployLink" onclick="deploy('${key}', '${manifest[key].bundle}')">&#8594;</a><input type="checkbox" class="directDeploySecondary"></input><div class="tooltip" id="${key}">Copied to Clipboard</div></td><td>Not Present</td></tr><tr><td>&nbsp</td><td>&nbsp</td></tr>`;
+                    newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], {}, key, manifest[key].bundle, {})}<tr><td colspan="9"></td></tr>`;
                 } else {
                     if (manifest[key].bundle != manifest2[key].bundle) {
                         diffFound = true;
                         if (manifest[key].updated > manifest2[key].updated) {
-                            newText = `${newText}<tr><th><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th><a href="${barn2URL}">${barn2Name} barn</a></th></tr><tr><td>${formatManifestData(manifest[key])}</td><td class="deploy"><a class="deployLink" onclick="deploy('${key}', '${manifest[key].bundle}')">&#8594;<br/></a><a class="deployLink" onclick="deploy('${key}', '${manifest2[key].bundle}')">&#8592;</a><input type="checkbox" class="directDeploySecondary"></input><div class="tooltip" id="${key}">Copied to Clipboard</div></td><td>${formatManifestData(manifest2[key])}\n</td></tr><tr><td>&nbsp</td><td>&nbsp</td></tr>`;
+                            newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], manifest2[key], manifest[key].bundle, manifest2[key].bundle)}<tr><td colspan="9"></td></tr>`;
                         } else {
-                            newText = `${newText}<tr><th><a href="${barn2URL}">${barn2Name} barn</a></th><th><a href="${barnURL}">${barnName} barn</a></th></tr><tr><td>${formatManifestData(manifest2[key])}</td><td class="deploy"><a class="deployLink" onclick="deploy('${key}', '${manifest2[key].bundle}')">&#8594;<br/></a><a class="deployLink" onclick="deploy('${key}', '${manifest[key].bundle}')">&#8592;</a><input type="checkbox" class="directDeploySecondary"></input><div class="tooltip" id="${key}">Copied to Clipboard</div></a></td><td>${formatManifestData(manifest[key])}\n</td></tr><tr><td>&nbsp</td><td>&nbsp</td></tr>`;
+                            newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest2[key], manifest[key], manifest2[key].bundle, manifest[key].bundle)}<tr><td colspan="9"></td></tr>`;
                         }
                     }
                 }
@@ -180,8 +183,26 @@ function compareManifests() {
     /**/
 }
 
-function formatManifestData(data) {
-    return `<table style="width:100%"><tbody><tr><th class="nameCell">Name</th><th class="genericCell">Version</th><th class="genericCell">User</th><th class="genericCell">Updated</th></tr><tr><td class="nameCell">${data.name}</td><td class="genericCell">${data.version}</td><td class="genericCell">${data.user}</td><td class="genericCell">${formatDate(data.updated)}</td></tr></tbody></table>`;
+function formatManifestData(data, data2, key, bundle, bundle2) {
+    let headers = '<th class="nameCell">Name</th><th class="genericCell">Version</th><th class="genericCell">User</th><th class="genericCell">Updated</th>';
+
+    let forwardDeployLink = `<a class="deployLink" onclick="deploy('${key}', '${bundle}')">&#8594;</a>`;
+    let reverseDeployLink;
+    if (Object.keys(data2).length === 0) {
+        reverseDeployLink = '';
+    } else {
+        reverseDeployLink = `<br/><a class="deployLink" onclick="deploy('${key}', '${bundle2}')">&#8592;</a>`
+    }
+    return `<tr>${headers}<td rowspan="2"class="deploy">${forwardDeployLink}${reverseDeployLink}<input type="checkbox" class="directDeploySecondary"></input><div class="tooltip" id="${key}">Copied to Clipboard</div></td>${headers}</tr><tr>${formatSingleBot(data)}${formatSingleBot(data2)}</tr>`;
+}
+
+function formatSingleBot(data) {
+    if (Object.keys(data).length === 0) {
+        return '<td colspan="4" class="centerText">Not Found</td>'
+    } else {
+        let name = data.name.replace('com.recondotech.batch.bots.', '')
+        return `<td class="nameCell">${name}</td><td class="genericCell">${data.version}</td><td class="genericCell">${data.user}</td><td class="genericCell">${formatDate(data.updated)}</td>`;
+    }
 }
 
 function formatDate(timestamp) {
@@ -195,7 +216,7 @@ function formatDate(timestamp) {
         second: '2-digit',
         hour12: true // Use AM/PM format
     });
-    return formattedTime = formatter.format(time);
+    return formatter.format(time);
 }
 
 function getOptionsInnerHTML(domainNames, selectedOption) {
