@@ -6,6 +6,10 @@
         table-layout: fixed;
     }
 
+    .queryParamsMain {
+        margin-right: 20px;
+    }
+
     div.select {
         text-align: right;
     }
@@ -13,6 +17,12 @@
     select, input {
         width: 20%;
         font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    input.dateFilterCheckbox {
+        width: 5%;
+        margin-bottom: 20px;
     }
 
     label {
@@ -23,10 +33,12 @@
         font-size: 20px;
         color: #feffde;
         background-color: #1a1e22;
+        overflow-x: scroll;
     }
 
     button {
         font-size: 20px;
+        margin-bottom: 10px;
     }
 
     a {
@@ -37,8 +49,12 @@
         color: #9e5e9b;
     }
 
-    table, th, td {
+    th, td {
         border: 1px solid #8c8e94;
+    }
+
+    table {
+        border-collapse: collapse;
     }
 
     th, td {
@@ -57,6 +73,13 @@
         float: left;
     }
 
+    div.dateFilterMain {
+        text-align: left;
+        font-size: 20px;
+        float: right;
+        margin-left: 30px;
+    }
+
     input.directDeploySecondary {
         display: none;
         text-align: left;
@@ -64,8 +87,34 @@
         float: left;
     }
 
-    .centerText {
+    input.dateFilterSecondary {
+        display: none;
+        text-align: start;
+        font-size: 20px;
+        float: right;
+        width: 100%;
+    }
+
+    div.dateFilterRow {
+        height: 25%;
+        display: grid;
+    }
+
+    label.dateFilterLabel {
+        display: none;
+        text-align: start;
+        font-size: 20px;
+        float: left;
+    }
+
+    .notFound {
         text-align: center;
+        background-color: #340000
+    }
+
+    .found {
+        text-align: center;
+        background-color: #343434
     }
 
     .hidden {
@@ -80,6 +129,10 @@
         text-align: center;
     }
 
+    .deployArrows {
+        background-color: #27292b
+    }
+
     .deployLink {
         font-size: 40px;
     }
@@ -88,13 +141,17 @@
         table-layout: fixed;
     }
 
+    .versionCell {
+        width: 47.5%
+    }
+
     .nameCell {
         overflow: hidden;
-        width: 40%;
+        width: 500px;
     }
 
     .genericCell {
-        width: 15%;
+        width: 150px;
     }
 </style>
 <script type="text/javascript" src="manifestDiff.js"></script>
@@ -110,10 +167,31 @@
         document.getElementById(name).style.display = "flex";
     }
 
-    function allowDirectDeploy(bundle) {
+    function allowDirectDeploy() {
         let elems = document.getElementsByClassName("directDeploySecondary");
         for (var i = 0; i < elems.length; i++) {
             elems[i].style.display = "flex";
+        }
+    }
+
+    function allowDateFiltering() {
+        let inputElems = document.getElementsByClassName("dateFilterSecondary");
+        let labelElems = document.getElementsByClassName("dateFilterLabel");
+        let checkbox = document.getElementById("dateFilterCheckbox");
+        let checkboxChecked = checkbox.checked;
+        for (var i = 0; i < inputElems.length; i++) {
+            if (checkboxChecked) {
+                inputElems[i].style.display = "inline-block";
+            } else {
+                inputElems[i].style.display = "none";
+            }
+        }
+        for (var i = 0; i < labelElems.length; i++) {
+            if (checkboxChecked) {
+                labelElems[i].style.display = "inline-block";
+            } else {
+                labelElems[i].style.display = "none";
+            }
         }
     }
 </script>
@@ -129,40 +207,60 @@
                                                                                                        onclick="allowDirectDeploy()"></input>
     </div>
     <br/>
-    <div id="queryParams">
+    <div class="queryParamsMain" id="queryParams">
         <div class="select"><label for="manifest1">First Manifest:</label><select id="manifest1"
                                                                                   name="manifest1"></select><br/><label
                 for="manifest2">Second Manifest:</label><select id="manifest2" name="manifest2"></select><br/><label
-                for="user">Deploy Username:</label><input type="text" id="user" name="user"></input><br/><label for="manifest1StartDate">Manifest 1 Start Date:</label>
-
-            <input
-                    type="date"
-                    id="manifest1StartDate"
-                    name="manifest1StartDate"
-                    value="2020-01-01"
-                    min="2020-01-01"/><br/><label for="manifest1EndDate">Manifest 1 End Date:</label>
-
-            <input
-                    type="date"
-                    id="manifest1EndDate"
-                    name="manifest1EndDate"
-                    value="2020-01-01"
-                    min="2020-01-01"/><br/><label for="manifest2StartDate">Manifest 2 Start Date:</label>
-
-            <input
-                    type="date"
-                    id="manifest2StartDate"
-                    name="manifest2StartDate"
-                    value="2020-01-01"
-                    min="2020-01-01"/><br/><label for="manifest2EndDate">Manifest 2 End Date:</label>
-
-            <input
-                    type="date"
-                    id="manifest2EndDate"
-                    name="manifest2EndDate"
-                    value="2020-01-01"
-                    min="2020-01-01"/><br/>
-            <button onclick="compareManifests()">Compare!</button><br/><label
+                for="user">Deploy Username:</label><input type="text" id="user" name="user"></input><br/>
+            <label for="dateFilterCheckbox">Filter By Date:</label><input type="checkbox"
+                                                                          id="dateFilterCheckbox"
+                                                                          class="dateFilterCheckbox"
+                                                                          name="dateFilterCheckbox"
+                                                                          onclick="allowDateFiltering()"></input><br/>
+            <div class="dateFilterMain">
+                <div class="dateFilterRow">
+                    <label for="manifest1StartDate" class="dateFilterLabel">Manifest 1 Start Date:</label>
+                    <input
+                            type="date"
+                            id="manifest1StartDate"
+                            name="manifest1StartDate"
+                            value="2020-01-01"
+                            min="2020-01-01"
+                            class="dateFilterSecondary"/>
+                </div>
+                <div class="dateFilterRow">
+                    <label for="manifest1EndDate" class="dateFilterLabel">Manifest 1 End Date:</label>
+                    <input
+                            type="date"
+                            id="manifest1EndDate"
+                            name="manifest1EndDate"
+                            value="2020-01-01"
+                            min="2020-01-01"
+                            class="dateFilterSecondary"/>
+                </div>
+                <div class="dateFilterRow">
+                    <label for="manifest2StartDate" class="dateFilterLabel">Manifest 2 Start Date:</label>
+                    <input
+                            type="date"
+                            id="manifest2StartDate"
+                            name="manifest2StartDate"
+                            value="2020-01-01"
+                            min="2020-01-01"
+                            class="dateFilterSecondary"/>
+                </div>
+                <div class="dateFilterRow">
+                    <label for="manifest2EndDate" class="dateFilterLabel">Manifest 2 End Date:</label>
+                    <input
+                            type="date"
+                            id="manifest2EndDate"
+                            name="manifest2EndDate"
+                            value="2020-01-01"
+                            min="2020-01-01"
+                            class="dateFilterSecondary"/>
+                </div>
+            </div>
+            <button onclick="compareManifests()">Compare!</button>
+            <br/><label
                     for="copy">Copied Deploy JSON</label><textarea id="copy" name="copy"></textarea>
         </div>
         <br/>

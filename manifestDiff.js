@@ -72,7 +72,7 @@ function compareManifests() {
     let manifest2StartDate = new Date(document.getElementById("manifest2StartDate").value).getTime();
     let manifest2EndDate = new Date(document.getElementById("manifest2EndDate").value).getTime();
 
-    let basicTableText = '<table id="mainTable" class="mainTable"><tbody><tr><th colspan="4">Newer Version</th><th class="deploy">copy deploy data</th><th colspan="4">Older version</th></tr>';
+    let basicTableText = '<table id="mainTable" class="mainTable"><tbody><tr><th colspan="4" class="versionCell">Newer Version</th><th class="deploy">copy deploy data</th><th colspan="4" class="versionCell">Older version</th></tr>';
     let newText;
 
     manifestURL = getManifestURLFromBarnName(barnName);
@@ -105,14 +105,14 @@ function compareManifests() {
                 Object.keys(manifest).sort().forEach(key => {
                     if (!manifest2[key]) {
                         diffFound = true;
-                        newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], {}, key, manifest[key].bundle, {})}<tr><td colspan="9"></td></tr>`;
+                        newText = `${newText}<tr><th colspan="4" class="found"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy found"></th><th colspan="4" class="notFound"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], {}, key, manifest[key].bundle, {})}<tr><td colspan="9"></td></tr>`;
                     } else {
                         if (manifest[key].bundle != manifest2[key].bundle) {
                             diffFound = true;
                             if (manifest[key].updated > manifest2[key].updated) {
-                                newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], manifest2[key], manifest[key].bundle, manifest2[key].bundle)}<tr><td colspan="9"></td></tr>`;
+                                newText = `${newText}<tr><th colspan="4" class="found"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy found"></th><th colspan="4" class="found"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], manifest2[key], manifest[key].bundle, manifest2[key].bundle)}<tr><td colspan="9"></td></tr>`;
                             } else {
-                                newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest2[key], manifest[key], manifest2[key].bundle, manifest[key].bundle)}<tr><td colspan="9"></td></tr>`;
+                                newText = `${newText}<tr><th colspan="4" class="found"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy found"></th><th colspan="4" class="found"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest2[key], manifest[key], manifest2[key].bundle, manifest[key].bundle)}<tr><td colspan="9"></td></tr>`;
                             }
                         }
                     }
@@ -134,14 +134,14 @@ function compareManifests() {
         Object.keys(manifest).sort().forEach(key => {
             if (!manifest2[key]) {
                 diffFound = true;
-                newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], {}, key, manifest[key].bundle, {})}<tr><td colspan="9"></td></tr>`;
+                newText = `${newText}<tr><th colspan="4" class="found"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy found"></th><th colspan="4" class="notFound"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], {}, key, manifest[key].bundle, {})}<tr><td colspan="9"></td></tr>`;
             } else {
                 if (manifest[key].bundle != manifest2[key].bundle) {
                     diffFound = true;
                     if (manifest[key].updated > manifest2[key].updated) {
-                        newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], manifest2[key], manifest[key].bundle, manifest2[key].bundle)}<tr><td colspan="9"></td></tr>`;
+                        newText = `${newText}<tr><th colspan="4" class="found"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy found"></th><th colspan="4" class="found"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], manifest2[key], manifest[key].bundle, manifest2[key].bundle)}<tr><td colspan="9"></td></tr>`;
                     } else {
-                        newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest2[key], manifest[key], manifest2[key].bundle, manifest[key].bundle)}<tr><td colspan="9"></td></tr>`;
+                        newText = `${newText}<tr><th colspan="4" class="found"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy found"></th><th colspan="4" class="found"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest2[key], manifest[key], manifest2[key].bundle, manifest[key].bundle)}<tr><td colspan="9"></td></tr>`;
                     }
                 }
             }
@@ -165,14 +165,14 @@ function compareManifests() {
             Object.keys(manifest).sort().forEach(key => {
                 if (!manifest2[key]) {
                     diffFound = true;
-                    newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], {}, key, manifest[key].bundle, {})}<tr><td colspan="9"></td></tr>`;
+                    newText = `${newText}<tr><th colspan="4" class="found"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy found"></th><th colspan="4" class="notFound"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], {}, key, manifest[key].bundle, {})}<tr><td colspan="9"></td></tr>`;
                 } else {
                     if (manifest[key].bundle != manifest2[key].bundle) {
                         diffFound = true;
                         if (manifest[key].updated > manifest2[key].updated) {
-                            newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], manifest2[key], manifest[key].bundle, manifest2[key].bundle)}<tr><td colspan="9"></td></tr>`;
+                            newText = `${newText}<tr><th colspan="4" class="found"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy found"></th><th colspan="4" class="found"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest[key], manifest2[key], manifest[key].bundle, manifest2[key].bundle)}<tr><td colspan="9"></td></tr>`;
                         } else {
-                            newText = `${newText}<tr><th colspan="4"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy"></th><th colspan="4"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest2[key], manifest[key], manifest2[key].bundle, manifest[key].bundle)}<tr><td colspan="9"></td></tr>`;
+                            newText = `${newText}<tr><th colspan="4" class="found"><a href="${barnURL}">${barnName} barn</a></th><th class="deploy found"></th><th colspan="4" class="found"><a href="${barn2URL}">${barn2Name} barn</a></th></tr>${formatManifestData(manifest2[key], manifest[key], manifest2[key].bundle, manifest[key].bundle)}<tr><td colspan="9"></td></tr>`;
                         }
                     }
                 }
@@ -193,15 +193,15 @@ function formatManifestData(data, data2, key, bundle, bundle2) {
     } else {
         reverseDeployLink = `<br/><a class="deployLink" onclick="deploy('${key}', '${bundle2}')">&#8592;</a>`
     }
-    return `<tr>${headers}<td rowspan="2"class="deploy">${forwardDeployLink}${reverseDeployLink}<input type="checkbox" class="directDeploySecondary"></input><div class="tooltip" id="${key}">Copied to Clipboard</div></td>${headers}</tr><tr>${formatSingleBot(data)}${formatSingleBot(data2)}</tr>`;
+    return `<tr>${headers}<td rowspan="2" class="deploy deployArrows">${forwardDeployLink}${reverseDeployLink}<input type="checkbox" class="directDeploySecondary"></input><div class="tooltip" id="${key}">Copied to Clipboard</div></td>${headers}</tr><tr>${formatSingleBot(data)}${formatSingleBot(data2)}</tr>`;
 }
 
 function formatSingleBot(data) {
     if (Object.keys(data).length === 0) {
-        return '<td colspan="4" class="centerText">Not Found</td>'
+        return '<td colspan="4" class="notFound">Not Found</td>'
     } else {
         let name = data.name.replace('com.recondotech.batch.bots.', '')
-        return `<td class="nameCell">${name}</td><td class="genericCell">${data.version}</td><td class="genericCell">${data.user}</td><td class="genericCell">${formatDate(data.updated)}</td>`;
+        return `<td class="nameCell found">${name}</td><td class="genericCell found">${data.version}</td><td class="genericCell found">${data.user}</td><td class="genericCell found">${formatDate(data.updated)}</td>`;
     }
 }
 
